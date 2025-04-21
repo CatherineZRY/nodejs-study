@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+  <title>
+    <%=locals?.title ?
+      locals.title
+      : "EJS Tag Execution"
+      %>
+  </title>
+</head>
+
+<body>
+  <h1>
+    <!-- Tite goes here -->
+  </h1>
+  <% if(locals){%>
+    <p>Current second:
+      <!-- Current second goes here -->
+      <%=locals.seconds || "No seconds found"
+        %>
+    </p>
+    <% if((locals.seconds||0)%2===0){%>
+      <!-- locals用于存储在ejs中的总变量 -->
+      <% if(locals.items?.length){%>
+        <ul>
+          <% items.forEach(element=> { %>
+            <li>
+              <%= element%>
+            </li>
+            <% })%>
+        </ul>
+        <% }else{%>
+          <p>No items to display</p>
+
+          <% }%>
+            <% }else{%>
+              <p>No items to display</p>
+              <%}%>
+
+                <p>
+                  <%- locals.htmlContent||''%>
+                    <!-- HTML content goes here -->
+                </p>
+
+                <!-- Footer goes here -->
+                <%- include("footer.ejs")%>
+                  <% }else
+                    {
+                    %>
+                    <p>No locals found</p>
+                    <% }
+                      %>
+</body>
+
+</html>

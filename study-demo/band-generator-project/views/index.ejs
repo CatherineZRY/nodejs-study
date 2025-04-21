@@ -1,0 +1,14 @@
+<!-- Step 3 Add Header -->
+<%- include('partials/header.ejs') %>
+
+<% if (locals.adjective && locals.noun) { %>
+  <h1>
+    <%= adjective %> <%= noun %>
+  </h1>
+<% } %>
+
+<form action="/submit" method="POST">
+  <input type="submit" value="Generate Name">
+</form>
+  <!-- Step 3 Add Footer -->
+<%- include('partials/footer.ejs') %>

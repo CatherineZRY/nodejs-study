@@ -1,0 +1,3 @@
+native nodejs test
+
+Hello from Cathy
