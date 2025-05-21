@@ -26,11 +26,12 @@ app.use(
     secret: "secret",
     resave: false,
     saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 设置cookie的过期时间
   })
 );
 
 // 初始化Passport中间件
-// 作用：
+// 作用： 
 // 1. 在请求对象上初始化passport属性
 // 2. 为每个请求创建新的Passport实例
 // 3. 配置验证用户所需的基础环境
@@ -98,11 +99,28 @@ app.post("/register", async (req, res) => {
           console.error("Error hashing password:", err);
         } else {
           console.log("Hashed Password:", hash);
-          await db.query(
+          const result = await db.query(
             "INSERT INTO users (username, password) VALUES ($1, $2)",
             [email, hash]
           );
-          res.redirect("/login");
+          const user = result.rows[0];
+          // 此方法为Passport提供，使用req.login()方法将用户信息存储到session中
+          // 优点：
+          // （1）不通过传统的passport.authenticate()中间件即可登录用户
+          // （2）可以更灵活地控制登录过程
+          // 执行流程：
+          // （1）调用req.login(user, callback)
+          // （2）Passport调用serializeUser函数
+          // （3）将序列化后的用户信息存储到session中
+          // （4）建立用户的登录状态
+          // （5）执行回调函数
+          req.login(user, (err) => {
+            if (err) {
+              console.error("Error logging in:", err);
+            } else {
+              res.redirect("/secrets");
+            }
+          });
         }
       });
     }
